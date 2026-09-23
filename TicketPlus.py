@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+
 class TicketService:
     def __init__(self, inventario, repositorio, email_service):
         self.inventario = inventario
@@ -15,20 +16,24 @@ class TicketService:
         return True
 
 
-email_mock = Mock()
-inventario_spy = inventarioSpy()
+if __name__ == "__main__":
+    from InventarioSpy import inventarioSpy
+    from RepoFake import RepositorioFake
+    from Dummy import usuarioDummy
 
-service = TicketService(
-    inventario_spy,         # Spy
-    RepositorioFake(),      # Fake
-    email_mock              # Mock
-)
-resultado = service.comprar("Ana", 2)
-assert resultado == True
-assert inventario_spy.veces_consultado == 1
-email_mock.enviar_confirmacion.assert_called_once_with("Ana")
-print(" Test pasó correctamente")
+    email_mock = Mock()
+    inventario_spy = inventarioSpy()
 
-# Ejecuta otra compra:
-service.comprar(usuarioDummy(), 1)
-print(inventario_spy.veces_consultado)
+    service = TicketService(
+        inventario_spy,         # Spy
+        RepositorioFake(),      # Fake
+        email_mock              # Mock
+    )
+    resultado = service.comprar("Ana", 2)
+    assert resultado == True
+    assert inventario_spy.veces_consultado == 1
+    email_mock.enviar_confirmacion.assert_called_once_with("Ana")
+    print("✅ Test pasó correctamente")
+
+    service.comprar(usuarioDummy(), 1)
+    print(inventario_spy.veces_consultado)
